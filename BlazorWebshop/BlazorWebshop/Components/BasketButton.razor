@@ -1,0 +1,10 @@
+﻿@rendermode InteractiveServer
+@inject NavigationManager navigationManager
+<button 
+    class="btn btn-primary"
+    @onclick="RedirectToBasket"
+>Basket</button>
+
+@code {
+    void RedirectToBasket() => navigationManager.NavigateTo("/basket");
+}

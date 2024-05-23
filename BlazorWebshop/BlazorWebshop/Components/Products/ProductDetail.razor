@@ -1,0 +1,52 @@
+﻿@page "/product"
+@page "/product/{id:int?}"
+
+@inject MockData mockData
+@inject ILocalStorageService localStorage
+
+@rendermode InteractiveServer
+
+@if (Product is null)
+{
+    <p>404 Page Not Found</p>
+}
+else
+{
+    <img class="img-fluid" src="@Product.ImageUrl" />
+    <h3>@Product.ProductName <span>@Product.Price</span></h3>
+    <p>@Product.Description</p>
+    <button @onclick="async ()  => await AddToBasketAsync(Product)">Add to Basket</button>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Product? Product { get; set; }
+    List<Product> basket { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        Product = mockData.SeedProducts().Find(p => p.ProductId == Id);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var basketData = await localStorage.GetItemAsync<List<Product>>("Product");
+            if (basketData is not null)
+            {
+                basket = basketData;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    public async Task AddToBasketAsync(Product product)
+    {
+        basket.Add(product);
+        await localStorage.SetItemAsync<List<Product>>("Product", basket);
+    }
+}

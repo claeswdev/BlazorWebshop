@@ -1,0 +1,15 @@
+﻿
+img {
+    width: 100%;
+    max-width: 350px;
+    height: 200px;
+    object-fit: cover;
+}
+
+div.card {
+    height: 300px;
+}
+
+div.card-text {
+    height: fit-content;
+}

@@ -1,0 +1,59 @@
+﻿@page "/"
+@page "/index"
+@page "/home"
+@rendermode InteractiveServer
+@inject MockData MockData
+@inject NavigationManager navigationManager
+@inject ILocalStorageService localStorage
+
+<PageTitle>Blazor Webshop</PageTitle>
+
+<div id="greeting">
+    <h1>Blazor Webshop</h1>
+
+    <p>Welcome to our awesome webshop! Whatever you need, we've got you covered!</p>
+</div>
+
+<div class="gallery">
+    @foreach (var product in Products)
+    {
+        <div @onclick="() => ViewProductDetail(product.ProductId)">
+            <ProductPreview 
+                Product="product"
+                OnClickAddProduct="async () => await AddTobasketAsync(product)"
+            />
+        </div>
+    }
+</div>
+
+@code {
+    List<Product> Products { get; set; } = new();
+    List<Product> basket { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        Products = MockData.SeedProducts();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var basketData = await localStorage.GetItemAsync<List<Product>>("Product");
+            if (basketData is not null)
+            {
+                basket = basketData;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    public async Task AddTobasketAsync(Product product)
+    {
+        basket.Add(product);
+        await localStorage.SetItemAsync<List<Product>>("Product", basket);
+    }
+
+    void ViewProductDetail(int id) => navigationManager.NavigateTo($"/product/{id}");
+}

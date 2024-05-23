@@ -1,0 +1,22 @@
+﻿<div class="card" style="width: 18rem;">
+    <img src="@(Product.ImageUrl)" class="card-img-top" alt="...">
+    <div class="card-body">
+        <p class="card-text">@Product.ProductName</p>
+        <button @onclick="AddToBasket" @onclick:stopPropagation>Add to Basket</button>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public Product Product { get; set; } = new Product();
+
+    [Parameter]
+    public EventCallback OnClickAddProduct { get; set; }
+
+    public string Test { get; set; } = string.Empty;
+
+
+    public void AddToBasket()
+    {
+        OnClickAddProduct.InvokeAsync();
+    }
+}

@@ -1,0 +1,82 @@
+﻿@page "/confirmation"
+@rendermode InteractiveServer
+@inject ILocalStorageService localStorage
+@inject MyStateContainer myStateContainer
+@inject NavigationManager navigationManager
+@inject BasketService bs
+
+<h3>Confirmation</h3>
+
+<section>
+    <h2>Basket</h2>
+    <ul>
+        @foreach (var p in Cart)
+        {
+            <li>@(basket.FirstOrDefault(prod => prod.ProductId == p.Key)!.ProductName) x @p.Value -
+                @((basket.FirstOrDefault(prod => prod.ProductId == p.Key)!.Price * p.Value))
+            </li>
+        }
+    </ul>
+    <p><strong>Total:</strong> @bs.CountTotalSumOfBasket(basket)</p>
+</section>
+
+<h3>Customer Details</h3>
+<dl>
+    <dt>Name</dt>
+    <dd>@Customer.Name</dd>
+    <dt>Email</dt>
+    <dd>@Customer.Email</dd>
+    <dt>Phone</dt>
+    <dd>@Customer.Phone</dd>
+    <dt>Street Address</dt>
+    <dd>@Customer.StreetAddress</dd>
+    <dt>Postal Code</dt>
+    <dd>@Customer.PostalCode</dd>
+    <dt>City</dt>
+    <dd>@Customer.City</dd>
+    <dt>Country</dt>
+    <dd>@Customer.Country</dd>
+</dl>
+
+<button @onclick="ConfirmOrderHandle">Confirm Order</button>
+
+@code {
+    List<Product> basket { get; set; } = new();
+    Dictionary<int, int?> Cart = new();
+
+    public Customer? Customer { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Customer = myStateContainer.Value;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var basketData = await localStorage.GetItemAsync<List<Product>>("Product");
+            if (basketData is not null)
+            {
+                basket = basketData;
+            }
+
+            foreach (var p in basket)
+            {
+                if (!Cart.ContainsKey(p.ProductId))
+                {
+                    Cart.Add(p.ProductId, 0);
+                }
+
+                Cart[p.ProductId]++;
+            }
+
+            StateHasChanged();
+        }
+    }
+    private void ConfirmOrderHandle(MouseEventArgs e)
+    {
+        localStorage.ClearAsync();
+        navigationManager.NavigateTo("/");
+    }
+}

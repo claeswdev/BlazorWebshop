@@ -1,0 +1,110 @@
+﻿@page "/basket"
+@rendermode InteractiveServer
+@inject ILocalStorageService localStorage
+@inject MyStateContainer myStateContainer
+@inject NavigationManager navigationManager
+@inject BasketService bs
+@implements IDisposable
+
+<PageTitle>Checkout</PageTitle>
+
+<section>
+    <h2>Checkout</h2>
+    <ul>
+        @foreach (var p in Cart)
+        {
+            <li>
+                @(basket.FirstOrDefault(prod => prod.ProductId == p.Key)!.ProductName) x @p.Value -
+                @((basket.FirstOrDefault(prod => prod.ProductId == p.Key)!.Price * p.Value))
+            </li>
+        }
+    </ul>
+    
+    <p><strong>Total:</strong> @bs.CountTotalSumOfBasket(basket)</p>
+</section>
+
+@* Adressformulär *@
+<EditForm Model="Customer" OnValidSubmit="Submit" FormName="Address" class="border border-danger" id="address-form">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <label class="form-label">
+        Name:
+        <InputText @bind-Value="Customer.Name" class="form-control" />
+    </label>
+    <label class="form-label">
+        Email:
+        <InputText @bind-Value="Customer.Email" class="form-control" />
+    </label>
+    <label class="form-label">
+        Phone:
+        <InputText @bind-Value="Customer.Phone" class="form-control" />
+    </label>
+    <label class="form-label">
+        Street Address:
+        <InputText @bind-Value="Customer.StreetAddress" class="form-control" />
+    </label>
+    <label class="form-label">
+        Postal Code:
+        <InputText @bind-Value="Customer.PostalCode" class="form-control" />
+    </label>
+    <label class="form-label">
+        City:
+        <InputText @bind-Value="Customer.City" class="form-control" />
+    </label>
+    <label class="form-label">
+        Country:
+        <InputText @bind-Value="Customer.Country" class="form-control" />
+    </label>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+
+
+    List<Product> basket { get; set; } = new();
+    Dictionary<int, int?> Cart = new();
+
+    [SupplyParameterFromForm(Name = "Address")]
+    public Customer Customer { get; set; } = new();
+
+    private void Submit()
+    {
+        myStateContainer.SetValue(Customer);
+        navigationManager.NavigateTo("/confirmation");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var basketData = await localStorage.GetItemAsync<List<Product>>("Product");
+            if (basketData is not null)
+            {
+                basket = basketData;
+            }
+
+
+            foreach (var p in basket)
+            {
+                if (!Cart.ContainsKey(p.ProductId))
+                {
+                    Cart.Add(p.ProductId, 0);
+                }
+
+                Cart[p.ProductId]++;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        myStateContainer.OnStateChange += StateHasChanged;
+    }
+
+    public void Dispose() 
+    {
+        myStateContainer.OnStateChange -= StateHasChanged;
+    }
+}
