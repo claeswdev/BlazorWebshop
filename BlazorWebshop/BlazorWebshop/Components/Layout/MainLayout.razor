@@ -1,17 +1,28 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+     @* <div class="sidebar">
+         <NavMenu />
+     </div> *@
 
     <main>
-        <div class="top-row px-4">
+        <header class="top-row px-4 d-flex justify-content-between">
+            <Title />
             <BasketButton />
+        </header>
+        <div class="d-flex justify-content-between">
+            <article class="content px-4">
+                @Body
+            </article>
+            <aside id="categories">
+                <h3>Categories</h3>
+                
+                @foreach(var category in categories)
+                {
+                    <div class="category">@category</div>        
+                }
+            </aside>
         </div>
-        <article class="content px-4">
-            @Body
-        </article>
     </main>
 </div>
 
@@ -20,3 +31,7 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    List<string> categories = new List<string> { "Tech", "Make-up", "Food" };
+}

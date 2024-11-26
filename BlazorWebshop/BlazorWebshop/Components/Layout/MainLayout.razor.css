@@ -94,3 +94,27 @@ main {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+div.page header {
+    height: fit-content;
+    padding: 20px 0;
+}
+
+aside#categories {
+    width: fit-content;
+    padding: 15px;
+    background-color: blue;
+}
+
+#categories h3 {
+    color: white;
+}
+
+#categories > .category {
+    list-style-type: none;
+    background-color: blue;
+    color: white;
+    width: 100%;
+    text-align: start;
+    border-bottom: 1px solid white;
+}
