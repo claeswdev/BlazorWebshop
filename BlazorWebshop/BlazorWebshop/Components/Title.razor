@@ -1,8 +1,10 @@
-﻿<div class="d-flex flex-column justify-content-between">
-    <div class="fs-1">Blazor Webshop</div>
+﻿@inject NavigationManager Navigation
+@rendermode InteractiveAuto
+
+<div class="d-flex flex-column justify-content-between">
+    <div id="home-button" class="fs-1" @onclick="NavigateToHome">Blazor Webshop</div>
     <div>Your one-stop-shop</div>
 </div>
-
 @code {
-
+    private void NavigateToHome() => Navigation.NavigateTo("/");
 }
