@@ -1,0 +1,19 @@
+﻿
+aside#categories {
+    width: fit-content;
+    padding: 15px;
+    background-color: blue;
+}
+
+#categories h3 {
+    color: white;
+}
+
+#categories > .category {
+    list-style-type: none;
+    background-color: blue;
+    color: white;
+    width: 100%;
+    text-align: start;
+    border-bottom: 1px solid white;
+}

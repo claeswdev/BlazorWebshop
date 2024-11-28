@@ -1,0 +1,22 @@
+﻿@page "/category-param/{cat}"
+@inject MockData MockData
+
+<h3>@Cat Products</h3>
+@foreach(var product in products)
+{
+    <div>@product.ProductName</div>
+}
+
+
+@code {
+    List<Product>? products;
+
+    [Parameter]
+    public string? Cat { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("hello from console");
+        products = MockData.SeedProducts().Where(p => p.Category.ToString().ToLower() == Cat).ToList();
+    }
+}

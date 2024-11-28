@@ -12,6 +12,7 @@
     @* <h1>Blazor Webshop</h1> *@
 
     @* <p>Welcome to our awesome webshop! Whatever you need, we've got you covered!</p> *@
+    <button @onclick="NavigateToTech">PressMe</button>
 </div>
 
 <div class="gallery">
@@ -29,6 +30,7 @@
 @code {
     List<Product> Products { get; set; } = new();
     List<Product> basket { get; set; } = new();
+    string category = "tech";
 
     protected override void OnInitialized()
     {
@@ -56,4 +58,6 @@
     }
 
     void ViewProductDetail(int id) => navigationManager.NavigateTo($"/product/{id}");
+
+    void NavigateToTech() => navigationManager.NavigateTo("tech");
 }
