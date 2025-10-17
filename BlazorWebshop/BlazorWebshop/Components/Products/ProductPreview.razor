@@ -5,6 +5,7 @@
         <button @onclick="AddToBasket" @onclick:stopPropagation>Add to Basket</button>
     </div>
 </div>
+
 @code {
     [Parameter]
     public Product Product { get; set; } = new Product();

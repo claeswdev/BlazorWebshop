@@ -31,4 +31,10 @@
     <Folder Include="Components\Products\OnSale\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\images\Logos\blazorWebShopLogotyp.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
