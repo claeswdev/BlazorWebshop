@@ -1,7 +1,10 @@
-﻿<div>
+﻿@rendermode InteractiveServer
+@inject NavigationManager navigationManager
+
+<div id="headerLogo" @onclick="RedirectToHome" title="Home">
     <img src="/images/Logos/blazorWebShopLogotypeGrayBG.png" width=192 height=192 />
 </div>
 
 @code {
-
+    void RedirectToHome() => navigationManager.NavigateTo("/");
 }
