@@ -14,14 +14,7 @@
             <article class="content px-4">
                 @Body
             </article>
-            <aside id="categories">
-                <h3>Categories</h3>
-                
-                @foreach(var category in categories)
-                {
-                    <div class="category">@category</div>        
-                }
-            </aside>
+            <CategoriesSidepanel />
         </div>
     </main>
 </div>
@@ -32,6 +25,4 @@
     <a class="dismiss">🗙</a>
 </div>
 
-@code {
-    List<string> categories = new List<string> { "Tech", "Make-up", "Food" };
-}
+@code {}
