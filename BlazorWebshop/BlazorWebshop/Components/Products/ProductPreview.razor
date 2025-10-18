@@ -1,7 +1,10 @@
 ﻿<div class="card" style="width: 18rem;">
     <img src="@(Product.ImageUrl)" class="card-img-top" alt="...">
     <div class="card-body">
-        <p class="card-text">@Product.ProductName</p>
+        <div class="d-flex justify-content-between">
+            <p class="card-text">@Product.ProductName</p>
+            <span>@Product.Price.ToString("$0.00")</span>
+        </div>
         <button @onclick="AddToBasket" @onclick:stopPropagation>Add to Basket</button>
     </div>
 </div>
